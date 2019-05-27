@@ -20,7 +20,7 @@ function AlertDialog({visible, title, message, leftText = '取消', leftPress, r
         {/** 内容 **/}
         <div className='alert-message'>{message}</div>
 
-        <div style={{backgroundColor: '#dddddd', height: 0.5, width: SCREEN_WIDTH - 60}}/>
+        <div className='divder-column' style={{width: SCREEN_WIDTH - 60}}/>
 
         {/** 确定和取消按钮 **/}
         <div className='alert-text-root'>
@@ -29,7 +29,7 @@ function AlertDialog({visible, title, message, leftText = '取消', leftPress, r
             <div className='alert-left-text'>{leftText}</div>
           </div>
 
-          <div style={{backgroundColor: '#dddddd', height: 50, width: 0.5}}/>
+          <div className='divder-row'/>
 
           <div className='alert-text-root-view' onClick={() => rightPress && rightPress()}>
             <div className='alert-right-text'>{rightText}</div>

@@ -71,16 +71,18 @@ export default class ManagerCityPage extends Component {
               Toast.info("设置为当前城市的无法删除", 1800)
             } else { // 删除当前信息
               deleteChooseCity(rowData.cityInfo)
-              this.setState({data: getChooseCity()})
-              // TODO 通知首页进行一些更新的操作
+              this.setState({data: getChooseCity()}, () => {
+                Toast.info("删除成功", 1800)
+              })
             }
           } else {
             if (rowData.defaultCity) { // 已经设置为当前城市了
               Toast.info("已经设置为当前城市了", 1800)
             } else {
               updateDefaultCity(rowData.cityInfo)
-              this.setState({data: getChooseCity()})
-              // TODO 通知首页进行一些更新的操作
+              this.setState({data: getChooseCity()}, () => {
+                Toast.info("设置当前城市成功", 1800)
+              })
             }
           }
         }}

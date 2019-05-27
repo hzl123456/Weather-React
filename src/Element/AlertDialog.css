@@ -57,3 +57,18 @@
     font-size: 16px;
     color: #3cb775;
 }
+
+.divder-column {
+    background-color: #dddddd;
+    height: 1px;
+    transform: scaleY(0.5);
+    transform-origin: 50% 100%;
+}
+
+.divder-row {
+    background-color: #dddddd;
+    height: 50px;
+    width: 1px;
+    transform: scaleX(0.5);
+    transform-origin: 100% 50%;
+}
