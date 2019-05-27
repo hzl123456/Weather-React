@@ -1,0 +1,47 @@
+.sticky-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.sticky-root {
+    display: flex;
+    height: 30px;
+    padding-left: 20px;
+    align-items: center;
+    background-color: #eeeeee;
+}
+
+.sticky-text {
+    font-size: 15px;
+    color: #3cb775;
+}
+
+.item-root {
+    display: flex;
+    flex-direction: row;
+    padding: 12px;
+    align-items: center;
+    height: 50px;
+}
+
+.item-root:active {
+    background-color: #E1E1E1;
+}
+
+.item-city-child {
+    margin-left: 30px;
+    font-size: 16px;
+    color: #333333;
+}
+
+.item-city-parent {
+    margin-left: 25px;
+    font-size: 15px;
+    color: #999999;
+}
+
+.item-city-provcn {
+    margin-left: 25px;
+    font-size: 13px;
+    color: #999999;
+}

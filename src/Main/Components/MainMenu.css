@@ -1,0 +1,52 @@
+.menu-img {
+    margin-bottom: 10px;
+}
+
+.menu-main {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.menu-item {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 15px;
+    flex-direction: row;
+    align-items: center;
+    display: flex;
+}
+
+.menu-item:active {
+    background-color: #E1E1E1;
+}
+
+.menu-item-text {
+    color: #333;
+    padding-left: 15px;
+}
+
+.menu-location-root {
+    display: flex;
+    position: absolute;
+    top: 0;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.menu-location-img {
+    margin-left: 10px;
+    width: 32px;
+    height: 16px;
+}
+
+.menu-location-text {
+    font-weight: bold;
+    margin-left: 5px;
+    color: white;
+    max-lines: 1;
+    font-size: 14px;
+    line-height: 16px;
+
+}

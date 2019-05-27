@@ -1,0 +1,21 @@
+.titlebar-root {
+    height: 56px;
+    background-color: #3cb775;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    position: relative;
+}
+
+.titlebar-text {
+    color: white;
+    font-size: 18px;
+    margin-left: 30px;
+    font-weight: bold;
+}
+
+.titlebar-img {
+    width: 24px;
+    height: 24px;
+    margin-left: 20px;
+}

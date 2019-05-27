@@ -1,0 +1,39 @@
+.aqi-root {
+    display: flex;
+    flex-direction: column;
+    height: 240px;
+}
+
+.aqi-view-root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.aqi-intro-root {
+    display: flex;
+    position: absolute;
+    height: 200px;
+    align-items: center;
+    width: 200px;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.aqi-text {
+    display: flex;
+    flex-direction: row;
+}
+
+.aqi-text-root {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.aqi-text-title {
+    color: #3cb775;
+}

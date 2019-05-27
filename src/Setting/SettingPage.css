@@ -1,0 +1,34 @@
+.list-item {
+    display: flex;
+    display: -webkit-flex;
+    flex: 1;
+    position: relative;
+    flex-direction: column;
+}
+
+.info-root {
+    padding: 15px;
+}
+
+.title {
+    color: #3cb775;
+    font-size: 16px;
+}
+
+.content {
+    color: #333;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.check-box {
+    pointer-events: none;
+    position: absolute;
+    top: 20px;
+    right: 40px;
+}
+
+.divider {
+    background-color: #BDBDBD;
+    height: 0.5px;
+}

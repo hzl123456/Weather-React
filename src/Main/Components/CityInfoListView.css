@@ -1,0 +1,6 @@
+.root {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    overflow: scroll;
+}

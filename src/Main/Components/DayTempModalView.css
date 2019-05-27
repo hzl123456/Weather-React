@@ -1,0 +1,33 @@
+.temp-modal-root {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.temp-item-root {
+    flex-direction: row;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    display: flex;
+}
+
+.temp-item-child-root {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.temp-item-child-text {
+    color: #575757;
+}
+
+.temp-item-child-img {
+    width: 24px;
+    height: 24px;
+}
