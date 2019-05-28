@@ -6,9 +6,9 @@
 import React from 'react';
 import "./TitleBar.css";
 
-function TitleBar({leftView, leftClick, title, rightView}) {
+function TitleBar({leftView, leftClick, title, rightView, className}) {
   return (
-    <div className='titlebar-root'>
+    <div className={className || 'titlebar-root'}>
       {
         leftView ? leftView :
           <img

@@ -4,7 +4,7 @@
  */
 import React, {Component} from 'react';
 import './MainPage.css'
-import {TitleBar} from '../Element/index'
+import {TitleBar, Toast, AlertDialog} from '../Element/index'
 import MainMenu from './Components/MainMenu'
 import {withRouter} from 'react-router-dom';
 import {getChooseCity, saveChooseCity} from "../Util/DbHelper"
@@ -21,6 +21,7 @@ class MainPage extends Component {
     const data = getChooseCity()
     this.sessionData = this._getSession(data)
     this.state = {
+      visible: false, // 是否展示截图分享弹窗
       dataList: data,
       locationAddress: this.sessionData.locationAddress, // 定位地址
       titleName: data.length === 0 ? '首页' : data[this.sessionData.index].cityInfo.city_child, // 默认为首页，当切换到城市的时候就采用城市的名称
@@ -63,27 +64,40 @@ class MainPage extends Component {
 
   render() {
     return (
-      <div>
+      <div id='root'>
+        {/**占位使用**/}
+        <div style={{height: 56}}/>
+        <MainMenu ref={(c) => this.mainMenu = c}
+                  history={this.props.history}
+                  locationAddress={this.state.locationAddress}/>
         <TitleBar
+          className='main-titlebar-root'
           leftView={
             <img
               src={require('../Resource/drawable3x/ic_menu.png')}
               alt={'首页按钮'}
+              onClick={() => this.mainMenu && this.mainMenu.changeStatus()}
               className='main-left-img'/>
           }
           rightView={
             <img
               src={require('../Resource/drawable3x/share_icon.png')}
               alt={'首页按钮'}
+              onClick={() => this.setState({visible: true})}
               className='main-right-img'/>
           }
           title={this.state.titleName}/>
-        <MainMenu history={this.props.history} locationAddress={this.state.locationAddress}/>
         <SwipeableViews
           index={this.sessionData.index}
           onChangeIndex={(index) => this._changeTitleName(index)}>
           {this._getCityInfoListView()}
         </SwipeableViews>
+        <AlertDialog
+          title={'提示'}
+          message={'确定生成当前天气截图？'}
+          leftPress={() => this.setState({visible: false})}
+          rightPress={() => this._shareWeather()}
+          visible={this.state.visible}/>
       </div>
     )
   }
@@ -141,6 +155,27 @@ class MainPage extends Component {
       array.push(<CityInfoListView key={`id_${i}`} data={dataList[i]}/>)
     }
     return array
+  }
+
+  /**
+   * 分享天气截图
+   * **/
+  _shareWeather = () => {
+    this.setState({visible: false})
+    Toast.info("坑太多，暂未实现该功能", 1800)
+    // 截图并且保存
+    // html2canvas(document.getElementById("root")).then(canvas => {
+    //   const MIME_TYPE = "image/png";
+    //   const imgURL = canvas.toDataURL(MIME_TYPE);
+    //   const dlLink = document.createElement('a');
+    //   dlLink.download = `${new Date()}weather.png`;
+    //   dlLink.href = imgURL;
+    //   dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
+    //   document.body.appendChild(dlLink);
+    //   dlLink.click();
+    //   document.body.removeChild(dlLink);
+    //   Toast.info("长按保存图片到本地", 2000)
+    // });
   }
 }
 

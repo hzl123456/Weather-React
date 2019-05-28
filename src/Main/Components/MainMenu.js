@@ -19,6 +19,18 @@ const MENU_DRAWABLES = [
 
 export default class MainMenu extends Component {
 
+  constructor(props) {
+    super(props)
+    let isOpen = false
+    let openStr = sessionStorage.getItem('isOpen')
+    if (openStr) {
+      isOpen = JSON.parse(openStr)
+    }
+    this.state = {
+      isOpen: isOpen
+    }
+  }
+
   static propTypes = {
     history: PropTypes.object, // 跳转使用
     locationAddress: PropTypes.string //定位得到的地址
@@ -36,13 +48,8 @@ export default class MainMenu extends Component {
           onPress={() => this._onPressMenuItem(position)}/>
       )
     }
-    let isOpen = false
-    let openStr = sessionStorage.getItem('isOpen')
-    if (openStr) {
-      isOpen = JSON.parse(openStr)
-    }
     return (
-      <Menu isOpen={isOpen} width={MENU_WIDTH}>
+      <Menu isOpen={this.state.isOpen} onStateChange={(e) => this.setState({isOpen: e.isOpen})} width={MENU_WIDTH}>
         <div className='menu-main'>
           <img
             className='menu-img'
@@ -60,6 +67,10 @@ export default class MainMenu extends Component {
         </div>
       </Menu>
     )
+  }
+
+  changeStatus = () => {
+    this.setState({isOpen: !this.state.isOpen})
   }
 
   _onPressMenuItem = (position) => {
