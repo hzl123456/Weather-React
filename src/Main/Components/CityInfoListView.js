@@ -4,28 +4,29 @@
  * @Author: linhe
  * @Date: 2019-05-21 15:36
  */
-import React, {Component} from 'react';
+import React, { Component } from 'react'
 import './CityInfoListView.css'
-import {SCREEN_HEIGHT} from '../../Util/Constant'
-import {BASE_URL, API_KEY, SCREEN_WIDTH} from "../../Util/Constant";
-import SwipeableViews from 'react-swipeable-views';
-import {updateCityWeather} from '../../Util/DbHelper'
+import { SCREEN_HEIGHT } from '../../Util/Constant'
+import { BASE_URL, API_KEY, SCREEN_WIDTH } from '../../Util/Constant'
+import SwipeableViews from 'react-swipeable-views'
+import { updateCityWeather } from '../../Util/DbHelper'
 import IntroduceView from '../Components/IntroduceView'
-import BrokenView from "./BrokenView";
+import BrokenView from './BrokenView'
 import TempView from './TempView'
 import AqiView from './AqiView'
 import WeatherView from './WeatherView'
-import {EventEmitter} from "events";
-import {PULL_TO_REFRESH} from '../../Util/ActionEvent'
+import { EventEmitter } from 'events'
+import { PULL_TO_REFRESH } from '../../Util/ActionEvent'
 import pullToRefresh from '../../Element/PullToRefresh/pullToRefresh'
 import ptrAnimatesMaterial from '../../Element/PullToRefresh/styles/material/animates'
 import '../../Element/PullToRefresh/styles/material/style.css'
+import { getUpdateState, getNotificationState } from '../../Util/DbHelper'
 
 const emitter = new EventEmitter()
 
 export default class CityInfoListView extends Component {
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     const {data} = this.props
     this.sessionKey = `container${data.cityInfo.city_id}`
@@ -33,15 +34,16 @@ export default class CityInfoListView extends Component {
     this.state = {
       data: data // 城市天气相关的一些数据
     }
+    this._setAutoRefresh()
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this._fetchCityWeatherInfo()
     const sessionKey = this.sessionKey
     // 下拉刷新的一个事件
     this.refreshEvent = emitter.addListener(PULL_TO_REFRESH + sessionKey, (resolve) => {
       this._fetchCityWeatherInfo(resolve)
-    });
+    })
     // 下拉刷新相关的
     pullToRefresh({
       container: document.querySelector(`.container${sessionKey}`),
@@ -57,12 +59,25 @@ export default class CityInfoListView extends Component {
     this.scrollView && this.scrollView.scrollTo({left: 0, top: this.sessionData.location})
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     // 移除事件
     emitter.removeListener(this.refreshEvent, () => {
-    });
+    })
+    // 移除定时器
+    this.timer && clearInterval(this.timer)
     // 记录一个当前的状态
     this._saveSession()
+  }
+
+  /**
+   * 如果开启了自动更新，那这里将开启一个定时器去进行定时刷新的操作
+   * **/
+  _setAutoRefresh = () => {
+    const autoRefresh = getUpdateState()
+    if (autoRefresh) {
+      const time = 60 * 60 * 1000 //默认时间间隔为1小时
+      this.timer = setInterval(() => this._fetchCityWeatherInfo(null), time)
+    }
   }
 
   _getSession = () => {
@@ -102,6 +117,11 @@ export default class CityInfoListView extends Component {
         const weatherInfo = responseData.result
         //更新天气信息
         data.weatherInfo = weatherInfo
+        // 判断是否需要显示通知栏，如果是默认城市的话将在通知栏进行展示
+        if (data.defaultCity && getNotificationState()) {
+          const message = `${weatherInfo.temp}° ${weatherInfo.weather} ${weatherInfo.updatetime.split(' ')[1]}更新`
+          this._showNotifation(data.cityInfo.city_child + '天气更新', message)
+        }
         //保存信息到数据库中
         updateCityWeather(data.cityInfo, weatherInfo)
         //更新 state 数据
@@ -113,7 +133,7 @@ export default class CityInfoListView extends Component {
     })
   }
 
-  render() {
+  render () {
     return (
       <div className={`container${this.sessionKey} pull-to-refresh-material`}>
         <div
@@ -181,24 +201,45 @@ export default class CityInfoListView extends Component {
     )
   }
 
-  _getHighTempDataSource = (item) => {
-    let daily = item.weatherInfo.daily;
-    let array = [];
-    let number = daily.length > 7 ? 7 : daily.length;
-    for (let i = 0; i < number; i++) {
-      array.push(Number.parseInt(daily[i].day.temphigh));
+  _showNotifation = (title, message) => {
+    if (!window.Notification) { // 先判断是否支持通知
+      return
     }
-    return array;
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') { // 此时是允许通知的
+        // 先移除上一个
+        if (this.notification) {
+          this.notification.close()
+        }
+        this.notification = new Notification(title, {
+          body: message,
+          tag: 'weather',
+          icon: require('../../Resource/drawable3x/icon.png'),
+          requireInteraction: true,
+          renotify: true
+        })
+      }
+    })
+  }
+
+  _getHighTempDataSource = (item) => {
+    let daily = item.weatherInfo.daily
+    let array = []
+    let number = daily.length > 7 ? 7 : daily.length
+    for (let i = 0; i < number; i++) {
+      array.push(Number.parseInt(daily[i].day.temphigh))
+    }
+    return array
   }
 
   _getLowTempDataSource = (item) => {
-    let daily = item.weatherInfo.daily;
-    let array = [];
-    let number = daily.length > 7 ? 7 : daily.length;
+    let daily = item.weatherInfo.daily
+    let array = []
+    let number = daily.length > 7 ? 7 : daily.length
     for (let i = 0; i < number; i++) {
-      array.push(Number.parseInt(daily[i].night.templow));
+      array.push(Number.parseInt(daily[i].night.templow))
     }
-    return array;
+    return array
   }
 
 }
