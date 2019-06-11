@@ -169,9 +169,7 @@ export default class CityInfoListView extends Component {
       <div>
         <SwipeableViews
           index={this.sessionData.index}
-          onChangeIndex={(index) => {
-            this.sessionData.index = index
-          }}>
+          onChangeIndex={(index) => this.sessionData.index = index}>
           <TempView weatherInfo={weatherInfo}/>
           <AqiView weatherInfo={weatherInfo}/>
         </SwipeableViews>
