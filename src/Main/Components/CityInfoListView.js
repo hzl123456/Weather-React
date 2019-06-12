@@ -139,7 +139,7 @@ export default class CityInfoListView extends Component {
         <div
           ref={(c) => this.scrollView = c}
           onScroll={() => this._onScrollEvent()}
-          className='root' style={{height: SCREEN_HEIGHT - 70}}>
+          className='root' style={{height: SCREEN_HEIGHT - 56}}>
           {this.renderContent()}
         </div>
         <div className="pull-to-refresh-material__control">

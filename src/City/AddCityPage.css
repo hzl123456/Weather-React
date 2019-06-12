@@ -1,17 +1,22 @@
-.sticky-container {
-    display: flex;
-    flex-direction: column;
+.sticky-list .sticky-container .am-list-item {
+    padding-left: 0;
 }
 
-.sticky-root {
+.sticky-list .sticky-container .am-list-line {
+    padding-right: 0;
+}
+
+.sticky-list .sticky-container .am-list-line .am-list-content {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.sticky-list .sticky-container .sticky {
     display: flex;
     height: 30px;
     padding-left: 20px;
     align-items: center;
     background-color: #eeeeee;
-}
-
-.sticky-text {
     font-size: 15px;
     color: #3cb775;
 }
@@ -21,7 +26,7 @@
     flex-direction: row;
     padding: 12px;
     align-items: center;
-    height: 50px;
+    height: 35px;
 }
 
 .item-root:active {

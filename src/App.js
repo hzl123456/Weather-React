@@ -9,6 +9,7 @@ import AboutUsPage from './Aboutus/AboutUsPage'
 import ManagerCityPage from './City/ManagerCityPage'
 import AddCityPage from './City/AddCityPage'
 import {HashRouter, Switch, Route} from 'react-router-dom'
+import 'antd-mobile/dist/antd-mobile.css';
 
 export default function App() {
   // 清除当前的 session ，主要是 menu 使用的

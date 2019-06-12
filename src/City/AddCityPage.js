@@ -4,50 +4,50 @@
  * @Author: linhe
  * @Date: 2019-05-17 10:35
  */
-import React, {Component} from 'react';
+import React, { Component } from 'react'
 import './AddCityPage.css'
-import {TitleBar, AlertDialog, Toast} from "../Element";
-import {ListView} from 'antd-mobile';
-import {SCREEN_HEIGHT} from '../Util/Constant'
-import {StickyContainer, Sticky} from 'react-sticky';
-import {saveChooseCity, isCityExits} from '../Util/DbHelper'
+import { TitleBar, AlertDialog, Toast } from '../Element'
+import { ListView } from 'antd-mobile'
+import { SCREEN_HEIGHT } from '../Util/Constant'
+import { StickyContainer, Sticky } from 'react-sticky'
+import { saveChooseCity, isCityExits } from '../Util/DbHelper'
 
-const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID];
-const getRowData = (dataBlob, sectionID, rowID) => dataBlob[rowID];
+const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID]
+const getRowData = (dataBlob, sectionID, rowID) => dataBlob[rowID]
 
 const ds = new ListView.DataSource({
   getRowData,
   getSectionHeaderData: getSectionData,
   rowHasChanged: (row1, row2) => row1 !== row2,
   sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-});
+})
 
 export default class AddCityPage extends Component {
 
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       dataSource: undefined,
       visible: false, // 是否显示弹窗
       rowData: undefined, // 数据
-    };
+    }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.getCityInfos()
   }
 
-  async getCityInfos() {
-    let data = await require('../Resource/assets/city.json');
+  async getCityInfos () {
+    let data = await require('../Resource/assets/city.json')
     let jsonData = data.data
     let dataBlob = {}
-    let sectionIDs = [];
-    let rowIDs = [];
+    let sectionIDs = []
+    let rowIDs = []
     for (let i = 0; i < jsonData.length; i++) {
-      rowIDs[i] = [];
-      sectionIDs[i] = jsonData[i].title; //标题相关
+      rowIDs[i] = []
+      sectionIDs[i] = jsonData[i].title //标题相关
       for (let j = 0; j < jsonData[i].city.length; j++) {
-        const title = i + "_" + j
+        const title = i + '_' + j
         dataBlob[title] = jsonData[i].city[j]
         rowIDs[i].push(title)
       }
@@ -57,11 +57,11 @@ export default class AddCityPage extends Component {
       const title = sectionIDs[i]
       dataBlob[title] = title
     }
-    let dataSource = ds.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs);
+    let dataSource = ds.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs)
     this.setState({dataSource})
   }
 
-  render() {
+  render () {
     return (
       <div>
         <TitleBar
@@ -86,10 +86,10 @@ export default class AddCityPage extends Component {
         rightPress={() => {
           this.setState({visible: false})
           if (isCityExits(rowData) !== -1) {
-            Toast.info("当前城市信息已存在", 1800)
+            Toast.info('当前城市信息已存在', 1800)
           } else {
             saveChooseCity(rowData)
-            Toast.info("城市添加成功", 1800)
+            Toast.info('城市添加成功', 1800)
           }
           // TODO 通知首页进行一些更新的操作
         }}
@@ -104,27 +104,26 @@ export default class AddCityPage extends Component {
     return (
       <ListView.IndexedList
         dataSource={this.state.dataSource}
+        className="am-list sticky-list"
         style={{height: SCREEN_HEIGHT - 56}}
         renderSectionWrapper={sectionID => (
           <StickyContainer
             key={`s_${sectionID}_c`}
-            style={{zIndex: 4}}
-            className="sticky-container"/>
+            className="sticky-container"
+            style={{zIndex: 4}}/>
         )}
         renderSectionHeader={sectionData => (
           <Sticky>
-            {() =>
-              <div className="sticky-root" style={{zIndex: 4}}>
-                <div className="sticky-text">{sectionData}</div>
-              </div>}
+            {({style}) => (
+              <div className="sticky" style={{...style, zIndex: 4}}>{sectionData}</div>
+            )}
           </Sticky>
         )}
         quickSearchBarStyle={{
-          position: 'absolute',
           top: 100,
           right: 10,
+          color: '#3cb775'
         }}
-        showQuickSearchIndicator={true}
         renderBodyComponent={() => <div>{this.props.children}</div>}
         renderRow={this.renderRow}/>
     )
