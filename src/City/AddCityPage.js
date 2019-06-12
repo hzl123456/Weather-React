@@ -9,7 +9,6 @@ import './AddCityPage.css'
 import { TitleBar, AlertDialog, Toast } from '../Element'
 import { ListView } from 'antd-mobile'
 import { SCREEN_HEIGHT } from '../Util/Constant'
-import { StickyContainer, Sticky } from 'react-sticky'
 import { saveChooseCity, isCityExits } from '../Util/DbHelper'
 
 const getSectionData = (dataBlob, sectionID) => dataBlob[sectionID]
@@ -91,7 +90,6 @@ export default class AddCityPage extends Component {
             saveChooseCity(rowData)
             Toast.info('城市添加成功', 1800)
           }
-          // TODO 通知首页进行一些更新的操作
         }}
         visible={this.state.visible}/>
     )
@@ -106,18 +104,8 @@ export default class AddCityPage extends Component {
         dataSource={this.state.dataSource}
         className="am-list sticky-list"
         style={{height: SCREEN_HEIGHT - 56}}
-        renderSectionWrapper={sectionID => (
-          <StickyContainer
-            key={`s_${sectionID}_c`}
-            className="sticky-container"
-            style={{zIndex: 4}}/>
-        )}
         renderSectionHeader={sectionData => (
-          <Sticky>
-            {({style}) => (
-              <div className="sticky" style={{...style, zIndex: 4}}>{sectionData}</div>
-            )}
-          </Sticky>
+          <div className="sticky">{sectionData}</div>
         )}
         quickSearchBarStyle={{
           top: 100,
