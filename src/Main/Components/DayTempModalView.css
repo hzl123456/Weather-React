@@ -1,6 +1,7 @@
 .day-temp .am-modal-content {
     position: relative;
     background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 0 !important;
 }
 
 .day-temp .am-modal-content .am-modal-body {

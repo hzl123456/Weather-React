@@ -1,6 +1,7 @@
 .modal-root .am-modal-content {
     position: relative;
     background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 0 !important;
 }
 
 .modal-root .am-modal-content .am-modal-body {
