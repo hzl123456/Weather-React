@@ -3,34 +3,36 @@
  * @Author: linhe
  * @Date: 2019-05-17 10:32
  */
-import React, {Component} from 'react';
-import {TitleBar, AlertDialog, Toast} from "../Element";
+import React, { Component } from 'react'
+import { TitleBar, AlertDialog, Toast } from '../Element'
 import './ManagerCityPage.css'
-import {ListView} from "antd-mobile";
-import {SCREEN_HEIGHT} from "../Util/Constant";
-import {getChooseCity, updateDefaultCity, deleteChooseCity} from "../Util/DbHelper"
+import { ListView } from 'antd-mobile'
+import { SCREEN_HEIGHT } from '../Util/Constant'
+import { getChooseCity, updateDefaultCity, deleteChooseCity } from '../Util/DbHelper'
 
-const ds = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
+const ds = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2})
 
 export default class ManagerCityPage extends Component {
 
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       data: getChooseCity(), // 当前管理的城市信息
       modalType: 1,// 1 表示删除，2 表示设置默认城市
       visible: false,
       rowData: undefined
-    };
+    }
+    // 当前列表是否在滚动
+    this.isScrolling = false
   }
 
-  componentDidMount() {
+  componentDidMount () {
     window.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-    });
+      e.preventDefault()
+    })
   }
 
-  render() {
+  render () {
     return (
       <div>
         <TitleBar
@@ -40,6 +42,12 @@ export default class ManagerCityPage extends Component {
         <ListView
           style={{height: SCREEN_HEIGHT - 56}}
           dataSource={ds.cloneWithRows(this.state.data)}
+          onScroll={(e) => {
+            this.isScrolling = true
+            // 50 ms后就设置为非滚动的状态
+            this.scrollTimer && clearTimeout(this.scrollTimer)
+            this.scrollTimer = setTimeout(() => this.isScrolling = false, 50)
+          }}
           renderBodyComponent={() => <div>{this.props.children}</div>}
           renderRow={this.renderRow}/>
 
@@ -68,20 +76,20 @@ export default class ManagerCityPage extends Component {
           this.setState({visible: false})
           if (modalType === 1) {
             if (rowData.defaultCity) { // 当前城市不能被删除
-              Toast.info("设置为当前城市的无法删除", 1800)
+              Toast.info('设置为当前城市的无法删除', 1800)
             } else { // 删除当前信息
               deleteChooseCity(rowData.cityInfo)
               this.setState({data: getChooseCity()}, () => {
-                Toast.info("删除成功", 1800)
+                Toast.info('删除成功', 1800)
               })
             }
           } else {
             if (rowData.defaultCity) { // 已经设置为当前城市了
-              Toast.info("已经设置为当前城市了", 1800)
+              Toast.info('已经设置为当前城市了', 1800)
             } else {
               updateDefaultCity(rowData.cityInfo)
               this.setState({data: getChooseCity()}, () => {
-                Toast.info("设置当前城市成功", 1800)
+                Toast.info('设置当前城市成功', 1800)
               })
             }
           }
@@ -98,9 +106,13 @@ export default class ManagerCityPage extends Component {
           startTime = new Date()
         }}
         onTouchEnd={() => {
-          if (new Date() - startTime > 800) { //表示长按事件
+          if (this.isScrolling) { //列表滚动的时候不进行计算
+            return
+          }
+          const time = new Date() - startTime
+          if (time > 500) { // 500ms 以上表示长按事件
             this._deleteCityInfo(rowData)
-          } else { // 表示单击事件
+          } else { //表示单击事件
             this._saveDefaultCity(rowData)
           }
         }}
