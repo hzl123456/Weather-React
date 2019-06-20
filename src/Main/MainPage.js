@@ -162,7 +162,7 @@ class MainPage extends Component {
    * **/
   _shareWeather = () => {
     this.setState({visible: false})
-    Toast.info("坑太多，暂未实现该功能", 1800)
+    Toast.info("请使用手机截图功能保存该天气截图", 1800)
     // 截图并且保存
     // html2canvas(document.getElementById("root")).then(canvas => {
     //   const MIME_TYPE = "image/png";
